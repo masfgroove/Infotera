@@ -1,0 +1,257 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+	<title>Infoterasss</title>
+</h:head>
+<h:body>
+	<h:form>
+
+		<p:growl id="messages" />
+
+		<p:menubar style="background-color: #3AABCF;">
+			<p:submenu label="Home" icon="pi pi-home">
+				<p:menuitem value="Cadastro"
+					url="http://localhost:8080/Cadastro/infotera3.xhtml" />
+				<p:separator />
+
+			</p:submenu>
+
+			<p:submenu label="Documentos" icon="pi pi-file">
+				<p:menuitem value="Documentos"
+					url="http://localhost:8080/Cadastro/cadastroDocumento.xhtml"
+					icon="pi pi-angle-double-left" />
+			</p:submenu>
+
+
+			<f:facet name="Localizar ID">
+
+			</f:facet>
+		</p:menubar>
+
+	</h:form>
+
+
+
+	<style type="text/css">
+.ui-g div {
+	background-color: #ededed;
+	text-align: center;
+	border: 1px solid #fafafa;
+}
+
+.ui-button-green {
+	background-color: #04AA6D;
+	border: none;
+	color: white;
+	padding: 15px 32px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	margin: 4px 2px;
+	cursor: pointer;
+}
+
+.ui-button-green:hover {
+	background-color: #45a049; /* Cor verde mais escura no hover */
+}
+</style>
+
+
+	<script>
+function recarregarAPagina(){
+    window.location.reload();
+} 
+</script>
+
+	<p:panel>
+		<h:graphicImage value="/resources/images/infotera.png"
+			style="max-width:200px;
+    max-height:150px;
+    width: auto;
+    height: auto;" />
+		<h:form id="form1">
+
+			<p:panel header="Sistema de Cadastro Infotera"
+				style="font-size: 20px;">
+
+
+
+				<h:panelGrid id="g_person" columns="10" cellpadding="5">
+					<p:outputLabel value="Id Cadastrado: #{universalBean.person.id}" />
+					<h:inputText value="#{universalBean.person.id}"
+						style="display:none;" />
+					<p:outputLabel value="Nome:" />
+					<p:inputText value="#{universalBean.person.nm_person}" size="50"
+						requiredMessage="Por favor digite seu nome." required="false" />
+
+
+					<p:outputLabel value="Email:" />
+					<p:inputText id="email" label="email" size="40"
+						requiredMessage="Por favor digite seu email." required="false"
+						value="#{universalBean.person.nm_email}">
+
+					</p:inputText>
+
+					<p:outputLabel value="Telefone:" />
+					<p:inputMask value="#{universalBean.person.nr_telephone}"
+						mask="(99) 99999-9999" validateMask="true"
+						requiredMessage="Por favor digite seu Telefone." required="false"
+						validatorMessage="Formato invalido do seu telefone" />
+
+					<p:outputLabel value="Gênero:" />
+
+					<p:selectOneMenu value="#{universalBean.person.tp_person}"
+						requiredMessage="Por favor escolha seu gênero." required="false">
+						<f:selectItem itemValue="" itemLabel="" />
+						<f:selectItem itemValue="M" itemLabel="Masculino" />
+						<f:selectItem itemValue="F" itemLabel="Feminino" />
+					</p:selectOneMenu>
+
+
+
+				</h:panelGrid>
+
+
+
+
+
+
+
+
+
+
+				<div class="ui-g">
+					<div class="ui-g-1">
+						<p:commandButton value="Cadastrar"
+							action="#{universalBean.savePerson}"
+							styleClass="ui-button-success">
+
+						</p:commandButton>
+					</div>
+					<div class="ui-g-1">
+						<p:commandButton value="Alterar"
+							action="#{universalBean.alterarPerson()}" update="form1"
+							styleClass="ui-button-primary" />
+					</div>
+
+					<div class="ui-g-1">
+						<p:commandButton value="Novo" action="#{universalBean.novo()}"
+							onclick="window.location.href='http://localhost:8080/Cadastro/Infotera3.xhtml'"
+							update="form1" styleClass="ui-button-warning" />
+					</div>
+
+					<div class="ui-g-1">
+						<p:commandButton value="Apagar"
+							action="#{universalBean.ApagarPerson}" update="form1"
+							styleClass="ui-button-danger" />
+					</div>
+
+
+					<div class="ui-g-1">
+						<!-- Incluir aqui os campos para localização -->
+						<p:inputText value="#{universalBean.idPesquisarP}"
+							style="width: 50px;" />
+
+					</div>
+
+					<div class="ui-g-1">
+
+						<p:commandButton value="Localizar por ID"
+							action="#{universalBean.buscaIdP}" ajax="false"
+							styleClass="ui-button-success" />
+					</div>
+
+
+					<div class="ui-g-1">
+						<p:commandButton value="Documentos"
+							action="#{universalBean.novo()}"
+							onclick="window.location.href='http://localhost:8080/Cadastro/cadastroDocumento.xhtml'"
+							update="form1" styleClass="ui-button-warning" />
+					</div>
+
+
+
+				</div>
+
+
+
+
+
+
+				<p:messages />
+			</p:panel>
+
+		</h:form>
+
+
+
+		<br />
+
+		<p:panel id="panel1" header="Cadastrados">
+
+
+			<h:form>
+
+
+				<p:dataTable var="e" value="#{universalBean.persons}" rows="10"
+					paginator="true"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+					currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+					rowsPerPageTemplate="5,10,15"
+					filteredValue="#{universalBean.persons}">
+					<p:column headerText="Codigo" sortBy="#{e.id}" filterBy="#{e.id}">
+						<h:outputText value="#{e.id}" />
+					</p:column>
+					<p:column headerText="Email" sortBy="#{e.nm_email}"
+						filterBy="#{e.nm_email}">
+						<h:outputText value="#{e.nm_email}" />
+					</p:column>
+
+					<p:column headerText="Nome" sortBy="#{e.nm_person}"
+						filterBy="#{e.nm_person}">
+						<h:outputText value="#{e.nm_person}" />
+					</p:column>
+
+					<p:column headerText="Telephone" sortBy="#{e.nr_telephone}"
+						filterBy="#{e.nr_telephone}">
+						<h:outputText value="#{e.nr_telephone}" />
+					</p:column>
+
+					<p:column headerText="Gênero" sortBy="#{e.tp_person}"
+						filterBy="#{e.tp_person}">
+						<h:outputText value="#{e.tp_person}" />
+					</p:column>
+
+					<p:column headerText="Opções">
+
+						<h:commandButton value="Pesquisar por ID"
+							action="#{universalBean.buscaIdP()}" styleClass="ui-button-green">
+							<f:setPropertyActionListener
+								target="#{universalBean.idPesquisarP}" value="#{e.id}" />
+						</h:commandButton>
+
+
+					</p:column>
+
+
+
+				</p:dataTable>
+			</h:form>
+
+		</p:panel>
+
+
+
+
+
+
+	</p:panel>
+
+</h:body>
+
+</html>

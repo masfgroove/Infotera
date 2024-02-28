@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+
+<h:head>
+	<title>Cadastro de Documentos</title>
+</h:head>
+
+<style>
+.texto-grande {
+	font-size: 40px; /* Tamanho da fonte desejado, em pixels */
+}
+
+.texto-médio {
+	font-size: 20px; /* Tamanho da fonte desejado, em pixels */
+}
+
+</style>
+<SCRIPT>
+function updateGrowl() {
+    PF('msgs').update();
+}</SCRIPT>
+
+<f:metadata>
+	<f:viewParam name="id" value="#{universalBean.personId}" />
+	<f:event listener="#{universalBean.loadPersonData}"
+		type="preRenderView" />
+	<f:event listener="#{universalBean.loadDocumentData()}"
+		type="preRenderView" />
+</f:metadata>
+
+
+<h:body>
+
+  <h:form>
+        
+         <p:growl id="messages"/>
+ 
+    <p:menubar style="background-color: #3AABCF;">
+        <p:submenu label="Home" icon="pi pi-home" >
+            <p:menuitem value="Cadastro" url="http://localhost:8080/Cadastro/infotera3.xhtml" />
+            <p:separator />
+            
+        </p:submenu>
+ 
+        <p:submenu label="Documentos" icon="pi pi-file">
+            <p:menuitem value="Documentos" url="http://localhost:8080/Cadastro/cadastroDocumento.xhtml" icon="pi pi-angle-double-left" />
+        </p:submenu>
+  
+  
+        <f:facet name="Localizar ID">
+
+</f:facet>
+    </p:menubar>
+        <br></br>
+        <p:panel header="Dados do Cliente">
+			
+			<h:outputLabel for="nm_person" value="Nome   :   " />
+			<h:outputText id="nm_person"
+				value="#{universalBean.person.nm_person}" styleClass="texto-grande" />
+			<h:outputLabel 
+				value="                                    -                                " />
+			
+			<h:outputLabel for="nr_telephone" value="Telefone   :   " />
+			<h:outputText id="nr_telephone" value="#{universalBean.person.nr_telephone}"
+				styleClass="texto-medio" />
+			<h:outputLabel 
+				value="                                    -                                " />
+			
+			<h:outputLabel for="nm_email" value="Email   :   " />
+			<h:outputText id="nm_email" value="#{universalBean.person.nm_email}"
+				styleClass="texto-medio" />
+		</p:panel>
+        
+        
+        </h:form>
+        
+        
+	
+	<BR></BR>
+	
+		
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	<p:panel header="document">
+	
+	<h:form id="documentForm">
+
+
+		
+
+
+
+
+
+
+			<!--INICIO : CADASTRO DE NOVO DOCUMENTO -->
+        
+        <p:accordionPanel widgetVar="basic">
+            <p:tab title="Clique aqui pra cadastrar novo documento ao cliente :   #{universalBean.person.nm_person}">
+                <p class="m-0">
+
+		<h:panelGrid columns="2">
+	    <h:outputLabel for="tp_document" value="Tipo   :" />
+			
+	        <p:selectOneMenu value="#{universalBean.document.tp_document}"
+						requiredMessage="Por favor escolha tipo de documento." required="false">
+						<f:selectItem itemValue="" itemLabel="" />
+						<f:selectItem itemValue="RG" itemLabel="RG" />
+						<f:selectItem itemValue="CPF" itemLabel="CPF" />
+					</p:selectOneMenu>
+	        
+		<h:outputLabel for="tp_document" value="Numero   :" />
+			<p:inputText id="nr_document"
+				value="#{universalBean.document.nr_document}" />
+
+			
+			<h:inputHidden id="personId" value="#{universalBean.personId}" />
+		</h:panelGrid>
+
+		<p:commandButton value="Salvar" action="#{universalBean.saveDocument}" />
+                </p>
+            </p:tab>
+            
+        </p:accordionPanel>
+<p:messages showDetail="true" autoUpdate="true" />
+<p:dialog header="Sucesso!" widgetVar="dlg">
+    <p>Documento cadastrado com sucesso!</p>
+</p:dialog>
+
+  
+			<!--FIM : CADASTRO DE NOVO DOCUMENTO -->
+  
+
+
+
+	</h:form>
+
+	<h:form>
+
+		<p:dataTable value="#{universalBean.personDocuments}" var="doc"
+			emptyMessage="Nenhum documento encontrado.">
+			<p:column headerText="Número do Id">
+				<h:outputText value="#{doc.id}" />
+			</p:column>
+
+			<p:column headerText="Número do Person Id">
+				<h:outputText value="#{doc.person.id}" />
+			</p:column>
+
+
+			<p:column headerText="Número do Documento">
+				<h:outputText value="#{doc.nr_document}" />
+			</p:column>
+			
+
+			<p:column headerText="Tipo do Documento">
+				<h:outputText value="#{doc.tp_document}" />
+			</p:column>
+			<p:column headerText="Editar">
+				<p:commandButton icon="pi pi-pencil" title="Editar" process="@this"
+					update=":editForm" oncomplete="PF('editDialog').show()">
+					<f:setPropertyActionListener value="#{doc}"
+						target="#{universalBean.personDocuments}" />
+				</p:commandButton>
+			</p:column>
+
+		</p:dataTable>
+
+		<h:panelGrid columns="2">
+			<h:outputLabel for="searchId" value="ID da Pessoa:" />
+			<p:inputText id="searchId" value="#{universalBean.personId}" />
+
+			<h:commandButton value="Buscar"
+				action="#{universalBean.findDocumentsByPersonId()}" />
+		</h:panelGrid>
+	</h:form>
+
+
+	<p:dialog header="Detalhes do Documento" widgetVar="editDialog" modal="true" width="1600" height="800" onHide="updateGrowl()">
+		
+			<p:panel id="editForm">
+			
+			<!-- INICIO CADASTRO DOCUMENTS -->
+			
+			<h:form id="form1">
+		<p:panel header="Consulta">
+			<p:panelGrid columns="2">
+				Codigo:
+				<p:inputText value="#{universalBean.idPesquisar}"/>
+				<p:commandButton value="Pesquisar" action="#{universalBean.buscaId}" update="form1"/>
+			</p:panelGrid>
+		</p:panel>
+		
+		<p:panel header="Dados do Documento">
+			
+			
+			<p:panelGrid columns="2">
+			    	
+				Codigo :
+				<h:inputHidden value="#{universalBean.document1.id}" />
+				Nome :
+				<p:inputText value="#{universalBean.document1.nr_document}"/>
+				Tipo :
+				<p:inputText value="#{universalBean.document1.tp_document}"/>
+			</p:panelGrid>
+			
+			
+			<p:commandButton value="Alterar" action="#{universalBean.alterar1()}" update="form1" styleClass="ui-button-success" oncomplete="PF('editDialog').hide()"/>
+			<p:commandButton value="Apagar" action="#{universalBean.apagar1()}" update="form1" styleClass="ui-button-success" />
+		</p:panel>	
+		<p:messages/>
+		<p:growl id="msgs" showDetail="true" />
+	</h:form>
+	
+	<p:dataTable id="panel1" value="#{universalBean.personDocuments}" var="doc">
+		<p:column headerText="Número do Id">
+			<h:outputText value="#{doc.id}" />
+		</p:column>
+		<p:column headerText="Número do Documento" >
+			<h:outputText value="#{doc.nr_document}" />
+		</p:column>
+		<p:column headerText="Tipo do Documento" >
+			<h:outputText value="#{doc.tp_document}" />
+		</p:column>
+		
+		
+	</p:dataTable>
+	
+			
+			
+			<!-- FIM CADASTRO DOCUMENTS -->
+			
+			
+			</p:panel>
+			
+		
+	</p:dialog>
+</p:panel>
+
+
+</h:body>
+</html>
