@@ -8,12 +8,12 @@ import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
-import dao.PersonEJB;
-import model.Person;
+import dao.DocumentEJB_nao_usar;
+import model.Document;
 
 @Named
 @RequestScoped
-public class PersonBean implements Serializable {
+public class DocumentBean_nao_usar implements Serializable {
 	
 	
 	
@@ -23,49 +23,48 @@ public class PersonBean implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@EJB
-	private PersonEJB personEJB;
+	private DocumentEJB_nao_usar documentEJB;
 	
-	private Person person;
+	private Document document;
 	
 	private Integer idPesquisar;
 	
-	private List<Person> persons;
+	private List<Document> documents;
 	
 	@PostConstruct
 	public void init() {
-		persons = personEJB.findAll();
+		documents = documentEJB.findAll();
 	}
 	
 	public String inserir() {
 		
-		personEJB.insert(person);
-		
+		documentEJB.insert(document);
 		 return null;
-		 
+		
 	}
 	
 	public String alterar() {
 		
-		personEJB.update(person);
+		documentEJB.update(document);
 		return null;
 	}
 	
     public String apagar() {
 		
-		personEJB.delete(person);
+		documentEJB.delete(document);
 		return null;
 	}
 
     public String novo() {
 		
-		person = new Person();
+		document = new Document();
 		return null;
 	}
     
     
    public String buscaId() {
 	   	
-	   	person = personEJB.load(idPesquisar);
+	   	document = documentEJB.load(idPesquisar);
 		return null;
 	}
     
@@ -74,12 +73,12 @@ public class PersonBean implements Serializable {
     
 	
 	
-	public Person getPerson() {
+	public Document getDocument() {
 		
-		if(person == null) {
-			person = new Person();
+		if(document == null) {
+			document = new Document();
 		}
-		return person;
+		return document;
 	}
 
 	public Integer getIdPesquisar() {
@@ -90,12 +89,12 @@ public class PersonBean implements Serializable {
 		this.idPesquisar = idPesquisar;
 	}
 
-	public List<Person> getPersons() {
-		return persons;
+	public List<Document> getDocuments() {
+		return documents;
 	}
 
-	public void setPersons(List<Person> persons) {
-		this.persons = persons;
+	public void setDocuments(List<Document> documents) {
+		this.documents = documents;
 	}
 
 	

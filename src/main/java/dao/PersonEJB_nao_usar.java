@@ -10,7 +10,7 @@ import model.Person;
 
 
 @Stateful
-public class PersonEJB {
+public class PersonEJB_nao_usar {
 
     @PersistenceContext
     private EntityManager em;

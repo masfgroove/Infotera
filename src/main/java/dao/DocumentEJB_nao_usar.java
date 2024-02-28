@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import model.Document;
 
 @Stateful
-public class DocumentEJB {
+public class DocumentEJB_nao_usar {
 	    
 		@PersistenceContext
 		private EntityManager em;
